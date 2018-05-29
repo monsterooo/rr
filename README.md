@@ -4,6 +4,8 @@ https://github.com/koba04/react-fiber-resources
 
 https://github.com/koba04/react-fiber-resources/blob/master/toy-renderers/ReactConsole.js
 
+https://github.com/michalochman/react-pixi-fiber
+
 http://makersden.io/blog/look-inside-fiber/#side-effect-tags-types-of-side-effects   A look inside React Fiber
 
 

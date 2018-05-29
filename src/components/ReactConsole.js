@@ -8,19 +8,20 @@ const sideEffect = (method, text) => console.log(text);
 
 const ConsoleRenderer = Reconciler({
   getRootHostContext() {
-    return {};
+    // console.log('getRootHostContext')
+    return {getRootHostContext: 'getRootHostContext'};
   },
 
   getChildHostContext() {
-    return {};
+    return {getChildHostContext: 'getChildHostContext'};
   },
-
+  // 获取createInstance返回的实例
   getPublicInstance(instance) {
-    return null;
+    return instance;
   },
 
   createInstance(type, props) {
-    return {};
+    return {createInstance: 'createInstance'};
   },
 
   appendInitialChild(parentInstance, child) {},
@@ -71,7 +72,7 @@ const ConsoleRenderer = Reconciler({
   },
 });
 
-console.log('ConsoleRenderer > ', ConsoleRenderer);
+// console.log('ConsoleRenderer > ', ConsoleRenderer);
 
 let root;
 const ReactConsole = {
@@ -80,9 +81,9 @@ const ReactConsole = {
       const container = {};
       root = ConsoleRenderer.createContainer(container);
     }
-    console.log('root > ', root);
+    // console.log('root > ', root);
     const res = ConsoleRenderer.updateContainer(element, root, null, callback);
-    console.log('updateContainer > ', res);
+    // console.log('updateContainer > ', res);
   },
 };
 
