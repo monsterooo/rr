@@ -11,46 +11,6 @@ http://makersden.io/blog/look-inside-fiber/#side-effect-tags-types-of-side-effec
 ### Fiber data structure
 
 ```javascript
-const Fiber = {
-  /**
-   * HostComponent
-   * REACT_FRAGMENT_TYPE
-   * REACT_ASYNC_MODE_TYPE
-   * REACT_STRICT_MODE_TYPE
-   * REACT_PROFILER_TYPE
-   * REACT_TIMEOUT_TYPE
-   * REACT_PROVIDER_TYPE
-   * REACT_CONTEXT_TYPE
-   * REACT_FORWARD_REF_TYPE
-   */
-  tag: HOST_COMPONENT,
-  // function/class/module fiber关联的类型
-  type: "div",
-  return: parentFiber,
-  child: childFiber,
-  sibling: null,
-  alternate: currentFiber,
-  // 用于记录Fiber对应真实dom节点，或当前虚拟组件实例。为了实现Ref和dom跟踪
-  stateNode: document.createElement("div")| instance,
-  props: { children: [], className: "foo"},
-  partialState: null,
-  /**
-   * NoEffect: 0, //           0b0000000
-   * Placement: 1, //          0b0000001
-   * Update: 2, //             0b0000010
-   * PlacementAndUpdate: 3, // 0b0000011
-   * Deletion: 4, //           0b0000100
-   * ContentReset: 8, //       0b0001000
-   * Callback: 16, //          0b0010000
-   * Err: 32, //               0b0100000
-   * Ref: 64, //               0b1000000
-   * 这样定义方便使用二进制操作
-   * effectTag |= Placement添加一个新标签，effectTag ＆= 〜Placement删除一个标签
-   */
-  effectTag: PLACEMENT,
-};
-```
-```javascript
 type Fiber = {
   // 这些字段在概念上属于组件的一个实例。
 
