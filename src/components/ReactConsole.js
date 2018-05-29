@@ -1,9 +1,10 @@
 const Reconciler = require('react-reconciler');
-// const colors = require('colors/safe');
-const colog = require('colog');
+const colors = require('colors/safe');
 
-//const sideEffect = (method, text) => console.log(colors[method](text));
-const sideEffect = (method, text) => colog[method](text);
+// const sideEffect = (method, text) => console.log(colors[method](text));
+const sideEffect = (method, text) => console.log(text);
+
+// const sideEffect = (method, text) => colog[method](text);
 
 const ConsoleRenderer = Reconciler({
   getRootHostContext() {
@@ -70,6 +71,8 @@ const ConsoleRenderer = Reconciler({
   },
 });
 
+console.log('ConsoleRenderer > ', ConsoleRenderer);
+
 let root;
 const ReactConsole = {
   render(element, callback) {
@@ -77,7 +80,9 @@ const ReactConsole = {
       const container = {};
       root = ConsoleRenderer.createContainer(container);
     }
-    ConsoleRenderer.updateContainer(element, root, null, callback);
+    console.log('root > ', root);
+    const res = ConsoleRenderer.updateContainer(element, root, null, callback);
+    console.log('updateContainer > ', res);
   },
 };
 

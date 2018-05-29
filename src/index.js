@@ -3,12 +3,17 @@ const ReactConsole = require('./components/ReactConsole');
 const colors = require('colors/safe');
 
 ReactConsole.render(
-  <React.Fragment>
-    <info>Hello</info>
+  <div>
+    <info>
+      Hello
+      <yellow>
+        Hello Yellow
+      </yellow>
+    </info>
     {/* <yellow>World</yellow>
     <cyan>React</cyan>
     <rainbow>Custom Renderer!</rainbow> */}
-  </React.Fragment>,
+  </div>,
   () => console.log(colors.inverse('##### Update ######'))
 );
 
