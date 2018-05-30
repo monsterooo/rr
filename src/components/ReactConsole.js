@@ -54,6 +54,7 @@ const ConsoleRenderer = Reconciler({
 
   mutation: {
     commitUpdate(instance, updatePayload, type, oldProps, newProps) {
+      console.log('commitUpdate');
       if (typeof newProps.children === 'string') {
         if (newProps.children !== oldProps.children) {
           sideEffect(type, newProps.children);
