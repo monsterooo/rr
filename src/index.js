@@ -1,36 +1,23 @@
-const React = require('react');
-const ReactConsole = require('./components/ReactConsole');
-const colors = require('colors/safe');
+import React from 'react';
+import ReactDOM from 'react-dom';
+import Surface from './components/Surface';
+import { Group } from './types';
 
-ReactConsole.render(
-  <div>
-    <info>
-      Hello
-      <yellow>
-        Hello Yellow
-      </yellow>
-    </info>
-    {/* <yellow>World</yellow>
-    <cyan>React</cyan>
-    <rainbow>Custom Renderer!</rainbow> */}
-  </div>,
-  () => console.log(colors.inverse('##### Update ######'))
+console.log('gruop > ', Group)
+const handleDragStart = (e) => {
+  console.log('drag start > ', e);
+}
+const handleTouchStart = (e) => {
+  console.log('touch start > ', e);
+}
+
+ReactDOM.render(
+  <Surface onTouchStart={handleTouchStart} width={300} height={300}>
+    <Group style={{color: 'red'}}>
+
+    </Group>
+  </Surface>, 
+  document.getElementById('root')
 );
 
-// ReactConsole.render(
-//   <>
-//     <green>Hello</green>
-//     <yellow>World2</yellow>
-//     <cyan>React</cyan>
-//   </>
-// );
-
-
-// import React from 'react';
-// import ReactDOM from 'react-dom';
-// import Custome from './components/Custome';
-// import ReactConsole from './components/ReactConsole';
-
-// ReactDOM.render(<Custome />, document.getElementById('root'));
-
-// export default Custome;
+export { Surface };
