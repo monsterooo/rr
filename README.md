@@ -13,6 +13,7 @@ https://developer.mozilla.org/zh-CN/docs/Web/API/CanvasRenderingContext2D mdn
 
 https://konvajs.github.io/api/   Konva 文档
 
+createChild
 
 ### Fiber data structure
 

@@ -2,26 +2,45 @@ import React from "react";
 import PropTypes from 'prop-types';
 import Reconciler from '../reconciler';
 import RenderLayer from '../utils/RenderLayer';
+import Frame from '../utils/Frame';
 import Konva from 'konva';
+import * as PIXI from "pixi.js";
+import layoutNode from '../utils/layoutNode';
 
+const childContextTypes = {
+  app: PropTypes.object,
+};
 class Surface extends React.Component {
+  getChildContext() {
+    return {
+      app: this._app,
+    };
+  }
+
   componentDidMount() {
     const { children, width, height } = this.props;
-
-    this._stage = new Konva.Stage({
-      width,
-      height,
-      container: this._tagRef
+    
+    this._app = new PIXI.Application(width, height, {
+      view: this._canvas,
     });
+    
+    // this._stage = new Konva.Stage({
+    //   width,
+    //   height,
+    //   container: this._tagRef
+    // });
+    this.node = new RenderLayer();
+    this.node.frame = Frame.make(this.props.left, this.props.top, this.props.width, this.props.height);
     // console.log('应用节点属性前 > ', this._stage);
-    applyNodeProps(this._stage, this.props);
+    // applyNodeProps(this._stage, this.props);
     // console.log('应用节点属性后 > ', this._stage);
 
-    this.node = new RenderLayer();
-    this._mountNode = Reconciler.createContainer(this._stage);
+    // this._mountNode = Reconciler.createContainer(this._stage);
+    this._mountNode = Reconciler.createContainer(this._app.stage);
+
     console.log('_mountNode > ', this._mountNode);
-    const res = Reconciler.updateContainer(this.props.children, this._mountNode, this);
-    console.log('res > ', res);
+    // const res = Reconciler.updateContainer(this.props.children, this._mountNode, this);
+    Reconciler.updateContainer(children, this._mountNode, this);
 
     Reconciler.injectIntoDevTools({
       findFiberByHostInstance: Reconciler.findFiberByHostInstance,
@@ -31,6 +50,7 @@ class Surface extends React.Component {
     });
     // console.log('mount node > ', this._mountNode);
     // console.log('did mount')
+    this.draw();
   }
   componentDidUpdate(prevProps, prevState) {
     const props = this.props;
@@ -50,20 +70,31 @@ class Surface extends React.Component {
 
     // this.getContext().scale(scale);
   }
+  draw() {
+    let layout;
+    if (this.node) {
+      if (this.props.enableCSSLayout) {
+        debugger;
+        layout = layoutNode(this.node);
+      }
+    }
+    console.log('draw layout > ', layout);
+  }
   render() {
     const props = this.props;
 
-    return (
-      <div
-        ref={ref => (this._tagRef = ref)}
-        accessKey={props.accessKey}
-        className={props.className}
-        role={props.role}
-        style={props.style}
-        tabIndex={props.tabIndex}
-        title={props.title}
-      />
-    );
+    return <canvas ref={ref => (this._canvas = ref)} />;
+    // return (
+    //   <div
+    //     ref={ref => (this._tagRef = ref)}
+    //     accessKey={props.accessKey}
+    //     className={props.className}
+    //     role={props.role}
+    //     style={props.style}
+    //     tabIndex={props.tabIndex}
+    //     title={props.title}
+    //   />
+    // );
   }
 }
 
@@ -151,6 +182,7 @@ function updatePicture(node) {
   var drawingNode = node.getLayer() || node.getStage();
   drawingNode && drawingNode.batchDraw();
 }
+Surface.childContextTypes = childContextTypes;
 
 
 export default Surface;

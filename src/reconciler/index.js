@@ -5,7 +5,11 @@ import now from "performance-now";
 import { createElement } from '../utils/createElement';
 
 function appendChild(parentInstance, child) {
-  debugger;
+  if (child) {
+    parentInstance.inject(child);
+  }
+  // parentInstance.removeChild(child);
+  // parentInstance.addChild(child);
   console.log('appendChild > ');
 }
 
@@ -31,6 +35,7 @@ function insertBefore(parentInstance, child, beforeChild) {
   // } else {
   //   parentInstance.addChildAt(child, index);
   // }
+  debugger;
   console.log('insertBefore > ');
 }
 
@@ -41,12 +46,14 @@ function insertBefore(parentInstance, child, beforeChild) {
  * @param {*} internalInstanceHandle  内部实例
  */
 function createInstance(type, props, internalInstanceHandle) {
+  debugger;
   // console.log('createInstance > ', type, props, internalInstanceHandle);
-  return createElement(type, props);
+  return createElement(type, props, internalInstanceHandle);
 }
 
 function createTextInstance(text, rootContainerInstance, internalInstanceHandle) {
-  invariant(false, "不支持文本实例，请使用Text组件.");
+  // debugger;
+  // invariant(false, "不支持文本实例，请使用Text组件.");
 }
 
 function finalizeInitialChildren(newInstance, type, newProps, rootContainerInstance, currentHostContext) {
@@ -63,8 +70,16 @@ function prepareForCommit() {
 }
 
 function prepareUpdate(instance, type, oldProps, newProps, rootContainerInstance, currentHostContext) {
-  // return diffProps(pixiElement, type, oldProps, newProps, rootContainerInstance);
-  console.log('prepareUpdate')
+  return diffProps(instance, type, oldProps, newProps, rootContainerInstance);
+  // 更新子节点属性
+  // instance.applyLayerProps(newProps);
+  // console.log('prepareUpdate > ');
+  // console.log('instance > ', instance);
+  // console.log('type > ', type);
+  // console.log('oldProps > ', oldProps);
+  // console.log('newProps > ', newProps);
+  // console.log('rootContainerInstance > ', rootContainerInstance);
+  // console.log('currentHostContext > ', currentHostContext);
   return true;
 }
 
@@ -90,21 +105,9 @@ function shouldSetTextContent(type, props) {
   return false;
 }
 
-// 提交更新
+// 更新props
 function commitUpdate(instance, updatePayload, type, lastRawProps, nextRawProps, internalInstanceHandle) {
-  // // injected types need to have full control over passed props
-  // if (isInjectedType(type)) {
-  //   applyProps(instance, lastRawProps, nextRawProps);
-  //   return;
-  // }
-
-  // // updatePayload is in the form of [propKey1, propValue1, ...]
-  // const updatedPropKeys = including(updatePayload.filter((item, i) => i % 2 === 0));
-  // const oldProps = filterByKey(lastRawProps, updatedPropKeys);
-  // const newProps = filterByKey(nextRawProps, updatedPropKeys);
-
-  // // regular components only receive props that have changed
-  // applyProps(instance, oldProps, newProps);
+  instance.applyLayerProps(nextRawProps);
   console.log('commitUpdate > ');
 }
 
@@ -141,8 +144,9 @@ const Reconciler = ReactReconciler({
   shouldSetTextContent,
   shouldDeprioritizeSubtree,
   now,
-  isPrimaryRenderer: false,
-  supportsMutation: true,
+  // isPrimaryRenderer: false,
+  // supportsMutation: true,
+  // useSyncScheduling: true,
   mutation: {
     appendChild,
     appendChildToContainer: appendChild,
@@ -155,5 +159,44 @@ const Reconciler = ReactReconciler({
     commitTextUpdate,
   },
 });
+
+const CHILDREN = 'children';
+// Calculate the diff between the two objects.
+// See: https://github.com/facebook/react/blob/97e2911/packages/react-dom/src/client/ReactDOMFiberComponent.js#L546
+export function diffProps(pixiElement, type, lastRawProps, nextRawProps, rootContainerElement) {
+  let updatePayload = null;
+
+  let lastProps = lastRawProps;
+  let nextProps = nextRawProps;
+  let propKey;
+
+  for (propKey in lastProps) {
+    if (nextProps.hasOwnProperty(propKey) || !lastProps.hasOwnProperty(propKey) || lastProps[propKey] == null) {
+      continue;
+    }
+    if (propKey === CHILDREN) {
+      // Noop. Text children not supported
+    } else {
+      // For all other deleted properties we add it to the queue. We use
+      // the whitelist in the commit phase instead.
+      (updatePayload = updatePayload || []).push(propKey, null);
+    }
+  }
+  for (propKey in nextProps) {
+    const nextProp = nextProps[propKey];
+    const lastProp = lastProps != null ? lastProps[propKey] : undefined;
+    if (!nextProps.hasOwnProperty(propKey) || nextProp === lastProp || (nextProp == null && lastProp == null)) {
+      continue;
+    }
+    if (propKey === CHILDREN) {
+      // Noop. Text children not supported
+    } else {
+      // For any other property we always add it to the queue and then we
+      // filter it out using the whitelist during the commit.
+      (updatePayload = updatePayload || []).push(propKey, nextProp);
+    }
+  }
+  return updatePayload;
+}
 
 export default Reconciler;
