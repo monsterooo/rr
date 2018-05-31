@@ -3,17 +3,18 @@ import Layer from './Layer';
 import * as PIXI from "pixi.js";
 
 class Text extends Layer {
-  constructor(props, parent) {
+  constructor(props) {
     super();
     const { children } = props;
 
     this.props = props;
-    this.node = new PIXI.Text(children, {
+    this._canvas = new Konva.Text({
       fill: 'red',
       fontSize: 24,
+      text: 'test',
     });
-    // this.applyLayerProps(props);
-    parent.addChild(this.node);
+    this.applyLayerProps(props);
+    // parent.add(this.node);
     console.log('Text parent > ', parent);
   }
   render() {

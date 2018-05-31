@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Surface from './components/Surface';
-import { Group, Text } from './types';
+import { Group, Text, Rect } from './types';
 
 console.log('gruop > ', Group)
 const handleDragStart = (e) => {
@@ -11,16 +11,21 @@ const handleTouchStart = (e) => {
   console.log('touch start > ', e);
 }
 
-function getGroupStyle(width, height) {
+function getGroupStyle(top = 0, left = 0, width = 0, height = 0) {
   return {
     position: 'relative',
     padding: 14,
-    width: width,
-    height: height,
+    top,
+    left,
+    width,
+    height,
     backgroundColor: '#f7f7f7',
-    flexDirection: 'column'
   };
 }
+
+// window.imageObj = new Image();
+// imageObj.src = 'https://konvajs.github.io/assets/yoda.jpg';
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -33,16 +38,74 @@ class App extends React.Component {
     //   })
     // }, 3000)
   }
+  getSize() {
+    return {
+      height: 300,
+      width: 300,
+    };
+    return document.getElementById('root').getBoundingClientRect();
+  }
+  getPageStyle() {
+    var size = this.getSize();
+    return {
+      position: 'relative',
+      padding: 14,
+      width: size.width,
+      height: size.height,
+      backgroundColor: '#f7f7f7',
+      flexDirection: 'column'
+    };
+  }
+  getTitleStyle() {
+    return {
+      // fontFace: FontFace('Georgia'),
+      fontSize: 22,
+      lineHeight: 28,
+      height: 40,
+      // width: 100,
+      marginBottom: 10,
+      color: '#333',
+      textAlign: 'center'
+    };
+  }
+  getImageGroupStyle() {
+    return {
+      position: 'relative',
+      flex: 1,
+      backgroundColor: '#eee'
+    };
+  }
+  getRect1Style() {
+    return {
+      position: 'relative',
+      flex: 1,
+      backgroundColor: '#eee'
+    };
+  }
+  getRect2Style() {
+    return {
+      position: 'relative',
+      flex: 1,
+      marginTop: 10,
+      backgroundColor: '#eee'
+    };
+  }
   render() {
     const { groupStyle } = this.state;
-
+    const size = this.getSize();
     return (
-      <Surface enableCSSLayout onTouchStart={handleTouchStart} width={300} height={300}>
-        <Group style={groupStyle}>
-          <Text>
-            Test
+      <Surface enableCSSLayout left={0} top={0} width={size.width} height={size.height}>
+        <Group style={this.getPageStyle()}>
+          <Rect style={this.getRect1Style()} />
+          <Rect style={this.getRect2Style()} />
+          {/* <Text style={this.getTitleStyle()}>
+            test
           </Text>
+          <Text style={this.getTitleStyle()}>
+            abc
+          </Text> */}
         </Group>
+
       </Surface>
     );
   }

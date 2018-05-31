@@ -5,9 +5,15 @@ import now from "performance-now";
 import { createElement } from '../utils/createElement';
 
 function appendChild(parentInstance, child) {
+  debugger;
   if (child) {
-    parentInstance.inject(child);
+    child.node.canvas = child._canvas;
+    parentInstance._canvas.add(child._canvas);
+    parentInstance.node.inject(child.node);
   }
+  // if (child) {
+  //   parentInstance.inject(child);
+  // }
   // parentInstance.removeChild(child);
   // parentInstance.addChild(child);
   console.log('appendChild > ');
@@ -35,7 +41,7 @@ function insertBefore(parentInstance, child, beforeChild) {
   // } else {
   //   parentInstance.addChildAt(child, index);
   // }
-  debugger;
+  // debugger;
   console.log('insertBefore > ');
 }
 
@@ -46,9 +52,8 @@ function insertBefore(parentInstance, child, beforeChild) {
  * @param {*} internalInstanceHandle  内部实例
  */
 function createInstance(type, props, internalInstanceHandle) {
-  debugger;
   // console.log('createInstance > ', type, props, internalInstanceHandle);
-  return createElement(type, props, internalInstanceHandle);
+  return createElement(type, props);
 }
 
 function createTextInstance(text, rootContainerInstance, internalInstanceHandle) {
@@ -70,9 +75,10 @@ function prepareForCommit() {
 }
 
 function prepareUpdate(instance, type, oldProps, newProps, rootContainerInstance, currentHostContext) {
-  return diffProps(instance, type, oldProps, newProps, rootContainerInstance);
+  // return diffProps(instance, type, oldProps, newProps, rootContainerInstance);
   // 更新子节点属性
-  // instance.applyLayerProps(newProps);
+  debugger;
+  instance.applyLayerProps(newProps);
   // console.log('prepareUpdate > ');
   // console.log('instance > ', instance);
   // console.log('type > ', type);
