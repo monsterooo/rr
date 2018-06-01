@@ -8,7 +8,12 @@ https://github.com/michalochman/react-pixi-fiber
 
 http://makersden.io/blog/look-inside-fiber/#side-effect-tags-types-of-side-effects   A look inside React Fiber
 
+https://developer.mozilla.org/zh-CN/docs/Web/API/CanvasRenderingContext2D mdn
 
+
+https://konvajs.github.io/api/   Konva 文档
+
+createChild
 
 ### Fiber data structure
 
