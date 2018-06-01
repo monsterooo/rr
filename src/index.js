@@ -30,13 +30,13 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      groupStyle: getGroupStyle(50, 100),
+      rect2Style: this.getRect2Style(20),
     };
-    // setTimeout(() => {
-    //   this.setState({
-    //     groupStyle: getGroupStyle(100, 200),
-    //   })
-    // }, 3000)
+    setTimeout(() => {
+      this.setState({
+        rect2Style: this.getRect2Style(5),
+      })
+    }, 3000)
   }
   getSize() {
     return {
@@ -82,22 +82,22 @@ class App extends React.Component {
       backgroundColor: '#eee'
     };
   }
-  getRect2Style() {
+  getRect2Style(mt) {
     return {
       position: 'relative',
       flex: 1,
-      marginTop: 10,
+      marginTop: mt,
       backgroundColor: '#eee'
     };
   }
   render() {
-    const { groupStyle } = this.state;
+    const { rect2Style } = this.state;
     const size = this.getSize();
     return (
       <Surface enableCSSLayout left={0} top={0} width={size.width} height={size.height}>
         <Group style={this.getPageStyle()}>
           <Rect style={this.getRect1Style()} />
-          <Rect style={this.getRect2Style()} />
+          <Rect style={rect2Style} />
           {/* <Text style={this.getTitleStyle()}>
             test
           </Text>

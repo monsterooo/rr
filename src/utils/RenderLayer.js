@@ -74,9 +74,9 @@ RenderLayer.prototype = {
   /**
    * Only the root owning layer should implement this function.
    */
-  draw: function () {
-    // Placeholer
-  }
+  // draw: function () {
+  //   // Placeholer
+  // }
 
 };
 

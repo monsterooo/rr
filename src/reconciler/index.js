@@ -3,9 +3,10 @@ import invariant from "fbjs/lib/invariant";
 import ReactReconciler from 'react-reconciler';
 import now from "performance-now";
 import { createElement } from '../utils/createElement';
+import applyNodeProps from '../utils';
 
 function appendChild(parentInstance, child) {
-  debugger;
+  // debugger;
   if (child) {
     child.node.canvas = child._canvas;
     parentInstance._canvas.add(child._canvas);
@@ -75,10 +76,10 @@ function prepareForCommit() {
 }
 
 function prepareUpdate(instance, type, oldProps, newProps, rootContainerInstance, currentHostContext) {
-  // return diffProps(instance, type, oldProps, newProps, rootContainerInstance);
+  return diffProps(instance, type, oldProps, newProps, rootContainerInstance);
   // 更新子节点属性
-  debugger;
-  instance.applyLayerProps(newProps);
+  // debugger;
+  // instance.applyLayerProps(newProps);
   // console.log('prepareUpdate > ');
   // console.log('instance > ', instance);
   // console.log('type > ', type);
@@ -113,7 +114,9 @@ function shouldSetTextContent(type, props) {
 
 // 更新props
 function commitUpdate(instance, updatePayload, type, lastRawProps, nextRawProps, internalInstanceHandle) {
+  debugger;
   instance.applyLayerProps(nextRawProps);
+  // draw(instance._canvas);
   console.log('commitUpdate > ');
 }
 
@@ -165,6 +168,8 @@ const Reconciler = ReactReconciler({
     commitTextUpdate,
   },
 });
+
+
 
 const CHILDREN = 'children';
 // Calculate the diff between the two objects.
